@@ -5,6 +5,8 @@ require 'jekyll'
 
 post '/' do
   dir = './tmp/jekyll'
+  FileUtils.rm_rf dir
+
   username = ENV['GH_USER'] || ''
   password = ENV['GH_PASS'] || ''
   
@@ -18,8 +20,10 @@ post '/' do
   options = {}
   options["server"] = false
   options["auto"] = false 
+  options["safe"] = false 
   options["source"] = dir
-  options["destination"] = dir + "/_site"
+  options["destination"] = File.join( dir, '_site')
+  options["plugins"] = File.join( dir, '_plugins')
   options = Jekyll.configuration(options)
   site = Jekyll::Site.new(options)
   
