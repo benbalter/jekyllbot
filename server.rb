@@ -14,7 +14,10 @@ post '/' do
   FileUtils.rm_rf dir
   
   push = JSON.parse(params[:payload])
-  return if push["commits"].first["author"]["name"] == name
+  if push["commits"].first["author"]["name"] == name
+    puts "This is just the callback from JekyllBot's last commit... aborting."
+    return
+  end
 
   url = push["repository"]["url"] + ".git"
   url["https://"] = "https://" + username + ":" + password + "@"
