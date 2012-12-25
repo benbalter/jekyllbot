@@ -4,19 +4,24 @@ require 'git'
 require 'jekyll'
 
 post '/' do
-  dir = './tmp/jekyll'
-  FileUtils.rm_rf dir
 
+  dir = './tmp/jekyll'
+  name = "JekyllBot"
+  email = "ben+bot@balter.com"
   username = ENV['GH_USER'] || ''
   password = ENV['GH_PASS'] || ''
   
+  FileUtils.rm_rf dir
+  
   push = JSON.parse(params[:payload])
+  return if push["commits"].first["author"]["name"] == name
+
   url = push["repository"]["url"] + ".git"
   url["https://"] = "https://" + username + ":" + password + "@"
   
   puts "cloning into " + url
   g = Git.clone(url, dir)  
-  
+   
   options = {}
   options["server"] = false
   options["auto"] = false 
@@ -38,7 +43,9 @@ post '/' do
   
   puts "succesfully built; commiting..."
   begin
-    puts g.commit_all( "JekyllBot building JSON files")
+    g.config('user.name', name)
+    g.config('user.email', email)  
+    puts g.commit_all( "[JekyllBot] Building JSON files")
   rescue Git::GitExecuteError => e
     puts e.message
   else
