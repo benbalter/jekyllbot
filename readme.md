@@ -1,7 +1,7 @@
 JekyllBot
 =========
 
-Listens for GitHub post-recieve service hooks messages, runs jekyll, and pushes the results back to GitHub. Designed to be run on Heroku to generate JSON representations of postdata for ben.balter.com.
+Listens for GitHub post-receive service hooks messages, runs jekyll, and pushes the results back to GitHub. Designed to be run on Heroku to generate JSON representations of postdata for ben.balter.com.
 
 Usage
 -----
